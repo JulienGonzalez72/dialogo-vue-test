@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dialogo Segmentation</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway">
+  </head>
+  <body>
+    <div id="app">
+
+      <!-- page des paramètres -->
+      <div v-if="state == 'params'" id="paramsVm">
+        <div id="paramsHeader" class="header">
+          <h1>Paramètres</h1>
+        </div>
+        
+        <h2>Appliquer un preset</h2>
+        <div id="presetButtons">
+          <button class="button3D" v-on:click="guidedReadPreset()">Lecture guidée</button>
+          <button class="button3D" v-on:click="segmentedReadPreset()">Lecture segmentée</button>
+          <button class="button3D" v-on:click="followedReadPreset()">Lecture suivie</button>
+        </div>
+
+        <br class="superWrap"/>
+
+        <h2>Changer les paramètres manuellement</h2>
+        <table>
+          <tr><td>Police :</td>
+            <td><select v-model="fontName" v-bind:style="{fontFamily: fontName}">
+              <option v-for="f in fontNames" v-bind:style="{fontFamily: f}">{{f}}</option>
+            </select></td>
+          <tr><td>Taille de la police :</td><td><input id="fontSizeField" type="number" v-model="fontSize"/></td></tr>
+          <tr v-if="fontSize < 0"><td colspan="2"><span class="errorSpan">La taille de la police doit être supérieure à 0 !</span></td></tr>
+          <tr><td></td></tr>
+
+          <tr><td>Surlignage du segment actuel :</td><td><input type="checkbox" v-model="guidedHighlight"/></td></tr>
+          <tr v-if="guidedHighlight"><td>Couleur de surlignage du segment actuel :</td><td><input type="color" v-model="rightColor"/></td></tr>
+          
+          <tr v-if="!automaticRead"><td>Couleur de surlignage d'erreur :</td><td><input type="color" v-model="wrongColor"/></td></tr>
+
+          <tr><td>Premier segment :</td><td><input type="number" v-model.number="firstPhrase"/></td></tr>
+          <tr v-if="firstPhrase < 1 || firstPhrase > utils.getPhrasesCount()"><td colspan="2"><span class="errorSpan">Le numéro de segment doit être compris entre 1 et {{utils.getPhrasesCount()}} !</span></td></tr>
+
+          <tr><td>Affichage de la consigne :</td><td><input type="checkbox" v-model="showExerciceState"/></td></tr>
+          <tr><td>Affichage des contrôles :</td><td><input type="checkbox" v-model="showControls"/></td></tr>
+          <tr><td>Lecture automatique :</td><td><input type="checkbox" v-model="automaticRead"/></td></tr>
+          <tr v-if="!automaticRead"><td>Rejouer le son après une erreur :</td><td><input type="checkbox" v-model="replaySound"/></td></tr>
+
+          <tr><td>Temps de répétition (en % du temps de lecture) :</td><td><input type="range" v-model="waitTime" min="0" max="300" step="10"/><br/>{{waitTime}} %</td></tr>
+        </table>
+
+        <div id="paramsFooter" class="footer">
+          <button id="launchButton" class="brightButton growableButton" v-on:click="launchExercice" :disabled="hasError()">Lancer l'exercice</button>
+        </div>
+      </div>
+
+      <!-- page de l'exercice -->
+      <div v-if="state == 'exercice'" id="exerciceVm">
+
+        <div id="exerciceHeader" class="header">
+          <image src="ressources/images/back icon.png" title="retour" class="brightButton" id="backButton" v-on:click="state = 'params'; utils.doStop()"/>
+          <span id="exerciceState" v-if="showExerciceState">{{exerciceState}}</span>
+          <span id="invisibleSpan">___</span>
+        </div>
+
+        <div id="textPane" v-bind:style="{cursor: canClick ? 'pointer' : 'wait'}">
+          <span v-for="p in phrases" v-bind:id="'phraseSpan' + p.index" v-bind:style="p.style">
+            <span v-if="p.index >= firstPhrase - 1" v-for="w in p.words" v-bind:style="w.style" v-on:click="utils.doClick(w)">{{w.text}} </span>
+          </span>
+        </div>
+
+        <div id="footer" class="footer">
+          <div v-if="showControls" id="controlDiv">
+            <image src="ressources/images/previous icon.png" id="previousButton" v-bind:class="currentPhraseIndex >= firstPhrase ? 'controlButton' : 'controlButtonDisabled'" v-on:click="utils.doPrevious()" :disabled="currentPhraseIndex < firstPhrase"/>
+            <image v-bind:src="'ressources/images/' + (!utils.isPlaying() ? 'play icon.png' : 'repeat icon.png')" id="playButton" class="controlButton" v-on:click="utils.doPlay()"/>
+            <image src="ressources/images/next icon.png" id="nextButton" v-bind:class="currentPhraseIndex < utils.getPhrasesCount() - 1 ? 'controlButton' : 'controlButtonDisabled'" v-on:click="utils.doNext()" :disabled="currentPhraseIndex >= utils.getPhrasesCount() - 1"/>
+          </div>
+
+          <div id="progressBar">
+            <div id="completedBar" v-bind:style="{width: ((currentPhraseIndex + 1) / utils.getPhrasesCount() * 100) + '%'}">
+            <div id="progressLabel">{{currentPhraseIndex + 1}} / {{utils.getPhrasesCount()}}</div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- page du compte rendu -->
+      <div v-if="state == 'report'" id="report">
+        <h1>Félicitations !</h1>
+        <span>Vous avez fait : {{errors}} erreur{{errors > 1 ? 's' : ''}}.</span><br class="superWrap"/>
+        <button id="reportBackButton" class="button3D" v-on:click="state = 'params'">Menu principal</button>
+      </div>
+
+    </div>
+    <script src="dist/build.js">
+    </script>
+    </body>
+</html>

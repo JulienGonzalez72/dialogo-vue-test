@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dialogo Segmentation</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div id="exerciceVm">
+      <div id="textPane" v-bind:style="{cursor: canClick ? 'pointer' : 'wait'}">
+      <span v-for="p in phrases" v-bind:style="p.style">
+        <span v-for="w in p.words" v-bind:style="w.style" v-on:click="doClick(w)">{{w.text}} </span>
+      </span>
+      </div>
+      <div id="progressLabel">{{currentPhraseIndex + 1}} / {{getPhrasesCount()}}</div>
+      <progress v-bind:min="firstPhrase" v-bind:max="getPhrasesCount()" v-bind:value="currentPhraseIndex + 1"></progress>
+    </div>
+    <script src="dist/build.js">
+    </script>
+  </body>
+</html>

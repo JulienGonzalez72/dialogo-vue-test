@@ -1,0 +1,302 @@
+@charset "UTF-8";
+
+/* variables globales */
+:root {
+	--header-background: #0DB9F6;
+}
+
+/* importation des polices nécessaires */
+
+@font-face {
+	font-family: OpenDyslexic;
+	src: url(ressources/fonts/OpenDyslexic-Bold.otf);
+}
+
+@font-face {
+	font-family: Andika;
+	src: url(ressources/fonts/AndBasR.ttf);
+}
+
+@font-face {
+	font-family: Lexia;
+	src: url(ressources/fonts/LEXIA___.otf);
+}
+
+body {
+	background-color: #FFFFFF;
+	font-family: OpenDyslexic;
+	margin: 0px;
+}
+
+/* haut de page générique */
+.header {
+	font-family: Raleway;
+	background-color: var(--header-background);
+	color: white;
+	box-shadow: 0 2px 2px #AAA;
+	border-radius: 0 0 4px 4px;
+	z-index: 1;
+	display: flex;
+	width: 100%;
+	height: 10%;
+}
+
+/* bas de page générique */
+.footer {
+	display: flex;
+	background-color: #FF9800;
+	bottom: 0px;
+	width: 100%;
+	height: 20%;
+}
+
+/*
+ *
+ * éléments de l'exercice
+ *
+ */
+
+/* haut de la page */
+#exerciceHeader {
+	position: fixed;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* bouton retour */
+#backButton {
+	margin-left: 10px;
+}
+
+#exerciceState {
+	font-size: 20px;
+}
+
+#invisibleSpan {
+	font-size: 20px;
+	margin-right: 10px;
+	padding: 1px 6px;
+	visibility: hidden;
+}
+
+/* conteneur du texte */
+#textPane {
+	background-color: rgb(255, 255, 255);
+	font-size: 24px;
+	top: 14%;
+	left: 2%;
+	width: 96%;
+	height: 62%;
+	position: fixed;
+	overflow-y: scroll;
+	cursor: pointer;
+	user-select: none;
+}
+
+/* boutons de contrôle */
+.controlButton {
+	user-select: none;
+	cursor: pointer;
+}
+
+.controlButtonDisabled {
+	user-select: none;
+	cursor: default;
+	pointer-events: none;
+	filter: brightness(60%);
+}
+
+/* conteneur des boutons de contrôle */
+#controlDiv {
+	display: flex;
+	justify-content: space-around;
+	width: 60%;
+	margin-left: 19%;
+	bottom: 10%;
+	margin-right: 0%;
+	z-index: 1;
+}
+
+#previousButton {
+}
+
+#playButton {
+}
+
+#nextButton {
+}
+
+/* libellé de la barre de progression */
+#progressLabel {
+	color: white;
+	font-family: Raleway;
+	position: absolute;
+	left: 45%;
+	right: 45%;
+	text-align: center;
+	font-size: 20px;
+	user-select: none;
+	z-index: 1;
+}
+
+/* barre de progression */
+#progressBar {
+	background-color: #EEEEEE55;
+	border-radius: 10px;
+	bottom: 10px;
+	width: 90%;
+	height: 20%;
+	margin-left: 5%;
+}
+
+/* progression de la barre de progression */
+#completedBar {
+	background-color: #00BBFF;
+	border-radius: 10px;
+	height: 100%;
+	text-align:center;
+	z-index: 0;
+}
+
+button {
+	font-size: 20px;
+	font-family: Raleway;
+	font-weight: 500;
+	border: none;
+	background-color: #00000000;
+	color: #8888FF;
+	cursor: pointer;
+	transition: 0.4s;
+}
+
+.brightButton:disabled {
+	cursor: default;
+	color: #FFF5;
+}
+
+/* effet de grossissement */
+.growableButton:hover:enabled {
+	transform: scale(1.5, 1.5);
+}
+
+button:focus {
+	outline: 0;
+}
+
+/* boutons de la page d'exercice */
+.brightButton {
+	color: white;
+	cursor: pointer;
+}
+
+/* bas de page qui contient les contrôles et la barre de progression */
+#footer {
+	position: fixed;
+	justify-content: space-around;
+	flex-direction: column;
+}
+
+/*
+ *
+ * éléments des paramètres
+ *
+ */
+
+#paramsVm {
+	text-align: center;
+	font-family: Raleway;
+}
+
+#paramsHeader {
+	height: 150px;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 60px;
+}
+
+h1 {
+	font-size: 40px;
+	line-height: 300%;
+}
+
+#paramsHeader h1 {
+	color: white;
+	line-height: normal;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+}
+
+td {
+	padding: 10px;
+}
+
+.errorSpan {
+	color: red;
+	line-height: 0;
+}
+
+.superWrap {
+	line-height: 300%;	
+}
+
+/* conteneur des boutons de preset */
+#presetButtons {
+	display: flex;
+	justify-content: space-around;
+	width: 90%;
+	margin-left: 5%;
+}
+
+/* boutons avec effet de relief */
+.button3D {
+	font-family: Raleway;
+	background-color: #D67F20;
+	color: white;
+	box-shadow: 0px 4px 0 #A36118;
+	border-radius: 10px;
+	padding: 10px;
+	transition: 0.2s;
+}
+
+.button3D:hover {
+	background-color: #C5751D;
+}
+
+.button3D:active {
+	box-shadow: 0px 2px 0 #A36118;
+	transform: translateX(0px) translateY(2px);
+}
+
+.button3D:disabled {
+	background-color: #8E8E8E;
+	color: #CCC;
+	box-shadow: 3px 3px 0 #676767;
+	cursor: default;
+}
+
+#paramsFooter {
+	justify-content: center;
+	align-items: center;
+	height: 100px;
+	margin-top: 60px;
+}
+
+/*
+ *
+ * éléments du compte rendu
+ *
+ */
+
+#report {
+	position: fixed;
+	width: 50%;
+	height: 50%;
+	left: 25%;
+	top: 25%;
+	text-align: center;
+	font-family: Raleway;
+}
