@@ -1,5 +1,7 @@
 const AUDIO_NAME = 'Aha take on me';
 
+var player = require('./player.js');
+
 var app;
 var instance;
 
@@ -19,6 +21,7 @@ export function init(vue, text) {
             app.phrases[i].style = '';
         }
     }
+    player.init(AUDIO_NAME, this.getPhrasesCount());
     return textPhrases;
 }
 
@@ -92,9 +95,7 @@ export function doPlay() {
 
 export function doStop() {
     app.stop = true;
-    if (app.currentSound != null) {
-        app.currentSound.pause();
-    }
+    player.stop();
 }
 
 export function doClick(word) {
@@ -174,12 +175,10 @@ export function removeWrongHighlight() {
 export function play(phrase) {
     app.exerciceState = 'Écoutez l\'enregistrement';
     app.canClick = false;
-    app.currentSound = this.getSounds(AUDIO_NAME)[phrase];
-    app.currentSound.play();
-    app.currentSound.onended = function() {
+    player.play(phrase);
+    player.setOnEnded(function() {
         instance.doWait();
-        app.currentSound = null;
-    }
+    });
 }
 
 /**
@@ -201,28 +200,14 @@ export function doWait() {
             app.exerciceState = 'Cliquez sur le dernier mot prononcé';
             app.canClick = true;
         }
-    }, app.currentSound.duration * app.waitTime * 10);
+    }, player.getDuration() * app.waitTime * 10);
 }
 
 /** 
  * si l'enregistrement est en train de jouer
  */
 export function isPlaying() {
-    return app.currentSound != null && !app.stop;
-}
-
-export function getSounds(name) {
-    var path = 'ressources/sounds/' + name;
-    var sounds = [];
-    for (let i = 0; i < this.getPhrasesCount(); i++) {
-        var num = (i + 1).toString();
-        while (num.length < 3) {
-            num = '0' + num;
-        }
-        sounds.push(new Object());
-        sounds[i] = new Audio(path + '/' + name + '(' + num + ').wav');
-    }
-    return sounds;
+    return player.isPlaying();
 }
 
 export function getCookie(name) {

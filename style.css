@@ -196,6 +196,10 @@ button:focus {
 	flex-direction: column;
 }
 
+image {
+	user-select: none;
+}
+
 /*
  *
  * éléments des paramètres

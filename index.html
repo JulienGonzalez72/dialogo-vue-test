@@ -56,8 +56,9 @@
       </div>
 
       <!-- page de l'exercice -->
-      <div v-if="state == 'exercice'" id="exerciceVm">
+      <div v-if="state == 'exercice'" id="exerciceVm" v-on:mousemove="dragging ? dragProgressBar() : null" v-on:mouseup="dragging ? endDrag() : null" v-on:mouseleave="dragging = false">
 
+        <!-- haut de page -->
         <div id="exerciceHeader" class="header">
           <image src="ressources/images/back icon.png" title="retour" class="brightButton" id="backButton" v-on:click="state = 'params'; utils.doStop()"/>
           <span id="exerciceState" v-if="showExerciceState">{{exerciceState}}</span>
@@ -70,6 +71,7 @@
           </span>
         </div>
 
+        <!-- bas de page -->
         <div id="footer" class="footer">
           <div v-if="showControls" id="controlDiv">
             <image src="ressources/images/previous icon.png" id="previousButton" v-bind:class="currentPhraseIndex >= firstPhrase ? 'controlButton' : 'controlButtonDisabled'" v-on:click="utils.doPrevious()" :disabled="currentPhraseIndex < firstPhrase"/>
@@ -78,7 +80,7 @@
           </div>
 
           <div id="progressBar">
-            <div id="completedBar" v-bind:style="{width: ((currentPhraseIndex + 1) / utils.getPhrasesCount() * 100) + '%'}">
+            <div id="completedBar" v-bind:style="{width: ((currentPhraseIndex + 1) / utils.getPhrasesCount() * 100) + '%'}" v-on:mousedown="dragging = true">
             <div id="progressLabel">{{currentPhraseIndex + 1}} / {{utils.getPhrasesCount()}}</div></div>
           </div>
         </div>

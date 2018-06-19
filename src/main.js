@@ -51,13 +51,10 @@ var app = new Vue({
     canClick: true,
     exerciceState: '',
     /**
-     * Son en cours de lecture.
-     */
-    currentSound: null,
-    /**
      * Nombre d'erreurs total
      */
     errors: 0,
+    dragging: false,
     utils: utils
   },
   methods: {
@@ -97,8 +94,22 @@ var app = new Vue({
     followedReadPreset: function() {
       this.segmentedReadPreset();
       this.guidedHighlight = true;
+    },
+    dragProgressBar: function() {
+      var bar = document.getElementById('completedBar');
+      var barX = bar.getBoundingClientRect().left;
+      var barWidth = document.getElementById('progressBar').getBoundingClientRect().width;
+      var relativeX = window.event.clientX - barX;
+      var relativeWidth = relativeX / barWidth;
+      if (relativeWidth <= 1) {
+        this.currentPhraseIndex = parseInt(utils.getPhrasesCount() * relativeWidth);
+      }
+    },
+    endDrag: function() {
+      utils.goTo(this.currentPhraseIndex);
+      this.dragging = false;
     }
-  },
+   },
   updated: function() {
     if (this.state == 'exercice') {
       var textPane = document.getElementById('textPane');
